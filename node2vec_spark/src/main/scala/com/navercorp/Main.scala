@@ -6,6 +6,7 @@ import scopt.OptionParser
 import com.navercorp.lib.AbstractParams
 
 object Main {
+  val repartionNum = 10
   object Command extends Enumeration {
     type Command = Value
     val node2vec, randomwalk, embedding = Value

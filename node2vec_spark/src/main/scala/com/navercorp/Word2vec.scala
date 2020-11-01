@@ -21,20 +21,20 @@ object Word2vec extends Serializable {
             .setMinCount(0)
             .setVectorSize(param.dim)
 
-    val word2vecWindowField = word2vec.getClass.getDeclaredField("org$apache$spark$mllib$feature$Word2Vec$$window")
-    word2vecWindowField.setAccessible(true)
-    word2vecWindowField.setInt(word2vec, param.window)
+//    val word2vecWindowField = word2vec.getClass.getDeclaredField("org$apache$spark$mllib$feature$Word2Vec$$window")
+//    word2vecWindowField.setAccessible(true)
+//    word2vecWindowField.setInt(word2vec, param.window)
     
     this
   }
   
   def read(path: String): RDD[Iterable[String]] = {
-    context.textFile(path).repartition(200).map(_.split("\\s").toSeq)
+    context.textFile(path).repartition(Main.repartionNum).map(_.split("\\s").toSeq)
   }
-  
+
   def fit(input: RDD[Iterable[String]]): this.type = {
     model = word2vec.fit(input)
-    
+
     this
   }
   
@@ -45,11 +45,11 @@ object Word2vec extends Serializable {
   
   def load(path: String): this.type = {
     model = Word2VecModel.load(context, path)
-    
+
     this
   }
   
   def getVectors = this.model.getVectors
-  
+
 }
 
